@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ACCESS TERMINAL</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00ff9f;
+      font-family: monospace;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    input, button {
+      background: black;
+      border: 1px solid #00ff9f;
+      color: #00ff9f;
+      padding: 10px;
+      font-family: monospace;
+    }
+
+    #files {
+      display: none;
+      margin-top: 30px;
+    }
+
+    a {
+      color: #00ff9f;
+      display: block;
+      margin: 5px;
+      text-decoration: none;
+    }
+
+    .glitch {
+      animation: flicker 0.15s infinite;
+    }
+
+    @keyframes flicker {
+      0% {opacity: 1;}
+      50% {opacity: 0.6;}
+      100% {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+
+<h1 class="glitch">SECURE TERMINAL</h1>
+<p>ENTER ACCESS CODE</p>
+
+<input id="codeInput" placeholder="CODE">
+<button onclick="unlock()">></button>
+
+<p id="message"></p>
+
+<div id="files">
+  <h2>ACCESS GRANTED</h2>
+  <a href="log1.txt">log_01.txt</a>
+  <a href="report.txt">incident_report.txt</a>
+  <a href="hidden.html">???</a>
+</div>
+
+<script>
+function unlock() {
+  const code = document.getElementById("codeInput").value;
+
+  if (code === "ECHO-17") {
+    document.getElementById("files").style.display = "block";
+    document.getElementById("message").innerText = "ACCESS GRANTED";
+  } else {
+    document.getElementById("message").innerText = "ACCESS DENIED";
+  }
+}
+</script>
+
+</body>
+</html>
