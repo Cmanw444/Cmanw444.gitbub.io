@@ -1,76 +1,189 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ACCESS TERMINAL</title>
+  <title>Forsaken Terminal</title>
   <style>
+    /* Old-school computer background */
     body {
-      background-color: black;
-      color: #00ff9f;
+      margin: 0;
+      padding: 0;
+      background: url('wallpaper.jpg') no-repeat center center fixed;
+      background-size: cover;
       font-family: monospace;
+      color: #00ff9f;
+    }
+
+    /* Fake desktop */
+    #desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Files */
+    .file {
+      position: absolute;
+      width: 80px;
       text-align: center;
-      margin-top: 100px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    input, button {
-      background: black;
-      border: 1px solid #00ff9f;
-      color: #00ff9f;
-      padding: 10px;
-      font-family: monospace;
-    }
-
-    #files {
-      display: none;
-      margin-top: 30px;
-    }
-
-    a {
-      color: #00ff9f;
+    .file img {
+      width: 64px;
       display: block;
-      margin: 5px;
-      text-decoration: none;
+      margin: 0 auto;
     }
 
-    .glitch {
-      animation: flicker 0.15s infinite;
+    /* Popup windows */
+    .window {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: black;
+      border: 2px solid #00ff9f;
+      padding: 10px;
+      display: none;
+      z-index: 10;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
-    @keyframes flicker {
-      0% {opacity: 1;}
-      50% {opacity: 0.6;}
-      100% {opacity: 1;}
+    .close-btn {
+      color: red;
+      cursor: pointer;
+      float: right;
+    }
+
+    /* Locked file style */
+    .locked {
+      filter: grayscale(100%);
+    }
+
+    /* Optional: glow effect for retro vibe */
+    .file span {
+      text-shadow: 0 0 5px #00ff9f;
     }
   </style>
 </head>
 <body>
+  <div id="desktop">
+    <!-- Files -->
+    <div class="file" style="top:50px; left:50px;" onclick="openFile('file1')">
+      <img src="file-icon.png"><span>log_01.txt</span>
+    </div>
 
-<h1 class="glitch">SECURE TERMINAL</h1>
-<p>ENTER ACCESS CODE</p>
+    <div class="file" style="top:50px; left:200px;" onclick="openFile('file2')">
+      <img src="file-icon.png"><span>report.txt</span>
+    </div>
 
-<input id="codeInput" placeholder="CODE">
-<button onclick="unlock()">></button>
+    <div class="file locked" id="secretFile" style="top:50px; left:350px;" onclick="openFile('file3')">
+      <img src="file-icon.png"><span>???</span>
+    </div>
+  </div>
 
-<p id="message"></p>
+  <!-- Windows / popups -->
+  <div class="window" id="file1Window">
+    <span class="close-btn" onclick="closeWindow('file1Window')">X</span>
+    <pre>
+INVESTIGATOR CASE LOG – ROBLOXIA MISSING PERSONS
 
-<div id="files">
-  <h2>ACCESS GRANTED</h2>
-  <a href="log1.txt">log_01.txt</a>
-  <a href="report.txt">incident_report.txt</a>
-  <a href="hidden.html">???</a>
-</div>
+Date: April 7, 2026
+Investigator: [Redacted]
 
-<script>
-function unlock() {
-  const code = document.getElementById("codeInput").value;
+I’ve been patrolling Robloxia and noticing a disturbing trend—people disappearing. Five children vanished without explanation, and now even adults, like Timmy, have been caught up in this.
 
-  if (code === "ECHO-17") {
-    document.getElementById("files").style.display = "block";
-    document.getElementById("message").innerText = "ACCESS GRANTED";
-  } else {
-    document.getElementById("message").innerText = "ACCESS DENIED";
-  }
-}
-</script>
+Timmy was investigating William Afton, the suspected killer behind the missing children. Reports indicate he was killed, but lately, people have been seeing him walking through town. Witnesses describe him as… off. Movements are jerky, expressions blank, nothing like the man they knew. It’s as if someone—or something—is copying him, imitating him, but it isn’t really him.
 
+No one knows exactly what’s happening yet. These “mimicked” appearances could be tied to the disappearances, but the source remains unknown. I’ll continue gathering evidence—tracking sightings, interviewing witnesses, and documenting every anomaly. This might be the next big case… and it’s only getting stranger.
+    </pre>
+  </div>
+
+  <div class="window" id="file2Window">
+    <span class="close-btn" onclick="closeWindow('file2Window')">X</span>
+    <pre>
+LOCAL POLICE DEPARTMENT
+INCIDENT REPORT
+
+Case Number: 85-07-119
+Date Filed: July 14, 1985
+Reporting Officer: Lt. R. Caldwell
+
+SUBJECT: Suspicious Activity – Deceased Adult Male Reported Seen Walking
+NAME OF INDIVIDUAL: Timmy [Last Name Unknown]
+AGE: Approx. 32–38
+STATUS: Confirmed Deceased
+
+SUMMARY OF INCIDENT:
+This report follows multiple late-night sightings of an adult male identified as “Timmy,” previously declared deceased. The subject was reportedly investigating a person of interest, William Afton, in relation to the disappearance of five children tied to an ongoing case.
+
+According to prior records, Timmy had expressed suspicion toward Afton and was last seen attempting to gather evidence. Shortly after, Timmy was reported missing and later presumed dead under unclear circumstances.
+
+In recent days, several witnesses claim to have seen a man matching Timmy’s description walking through isolated areas of town, including alleyways and near closed businesses. Witnesses consistently describe the subject as moving slowly, appearing disoriented, and failing to respond when addressed.
+
+WITNESS STATEMENTS (ABRIDGED):
+
+* “He looked like he was searching for something… or someone.”
+* “I called his name, but he didn’t even turn his head.”
+* “There was no way it was him… but it *was* him.”
+
+OFFICER OBSERVATION:
+Units dispatched to reported locations found no trace of the subject. Patrol logs confirm increased calls regarding similar sightings between 11:00 PM and 3:00 AM. No physical evidence has been recovered at this time.
+
+NOTES:
+
+* Subject was known to be actively suspicious of William Afton prior to death.
+* Connection between Timmy’s investigation and current sightings remains unknown.
+* Behavior reported does not align with normal human patterns.
+
+STATUS: OPEN
+RECOMMENDATION: Increase patrol presence in reported areas. Residents are advised not to approach the individual and to report sightings immediately.
+
+END OF REPORT
+    </pre>
+  </div>
+
+  <div class="window" id="file3Window">
+    <span class="close-btn" onclick="closeWindow('file3Window')">X</span>
+    <video width="640" controls autoplay>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <script>
+    // Track unlocked files
+    let unlockedFiles = 0;
+
+    function openFile(file) {
+      if (file === 'file1') {
+        document.getElementById('file1Window').style.display = 'block';
+        unlockedFiles++;
+        checkUnlockSecret();
+      } else if (file === 'file2') {
+        document.getElementById('file2Window').style.display = 'block';
+        unlockedFiles++;
+        checkUnlockSecret();
+      } else if (file === 'file3') {
+        if (unlockedFiles >= 2) {
+          document.getElementById('file3Window').style.display = 'block';
+        } else {
+          alert("File is locked. Investigate other files first.");
+        }
+      }
+    }
+
+    function closeWindow(win) {
+      document.getElementById(win).style.display = 'none';
+    }
+
+    function checkUnlockSecret() {
+      if (unlockedFiles >= 2) {
+        document.getElementById('secretFile').classList.remove('locked');
+      }
+    }
+  </script>
 </body>
 </html>
