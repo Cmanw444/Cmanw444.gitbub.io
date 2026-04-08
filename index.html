@@ -118,7 +118,7 @@
       <img src="file-icon.png"><span>report.txt</span>
     </div>
     <div class="file" style="top:50px; left:350px;" onclick="openFile('file3')">
-      <img src="file-icon.png"><span>???</span>
+      <img src="TXT.png"><span>???</span>
     </div>
   </div>
 
@@ -230,8 +230,8 @@ Units dispatched to reported locations found no trace of the subject. Patrol log
     });
 
     function openFile(file){
-      if(file === "file1") document.getElementById("TXT.png").style.display = "block";
-      if(file === "file2") document.getElementById("TXT.png").style.display = "block";
+      if(file === "file1") document.getElementById("file1Window").style.display = "block";
+      if(file === "file2") document.getElementById("file2Window").style.display = "block";
       if(file === "file3") document.getElementById("file3Window").style.display = "block";
     }
 
