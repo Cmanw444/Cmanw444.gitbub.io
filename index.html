@@ -3,7 +3,6 @@
 <head>
   <title>Forsaken Terminal</title>
   <style>
-    /* CMD-style terminal */
     body {
       margin: 0;
       padding: 0;
@@ -12,6 +11,7 @@
       color: #00ff00;
     }
 
+    /* CMD terminal */
     #terminal {
       width: 90%;
       max-width: 1000px;
@@ -42,21 +42,7 @@
       font-size: 16px;
     }
 
-    .message {
-      margin-bottom: 10px;
-    }
-
-    /* Locked file text */
-    .locked {
-      color: #ff5555;
-    }
-
-    /* Optional blink cursor */
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
+    .message { margin-bottom: 10px; }
 
     #cursor {
       display: inline-block;
@@ -66,56 +52,129 @@
       animation: blink 1s infinite;
     }
 
-    /* Scrollbar style for immersion */
-    #terminal::-webkit-scrollbar {
-      width: 8px;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
-    #terminal::-webkit-scrollbar-thumb {
-      background: #00ff00;
+    /* Retro desktop (hidden initially) */
+    #desktop {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: url('wallpaper.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
     }
+
+    .file {
+      position: absolute;
+      width: 80px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .file img { width: 64px; display: block; margin: 0 auto; }
+
+    .window {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: black;
+      border: 2px solid #00ff00;
+      padding: 10px;
+      display: none;
+      z-index: 10;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close-btn { color: red; cursor: pointer; float: right; }
   </style>
 </head>
 <body>
+  <!-- CMD Terminal -->
   <div id="terminal">
     <div class="message">Welcome to Forsaken Terminal v1.0</div>
-    <div class="message">Type the password to unlock files:</div>
+    <div class="message">Type the password to unlock the system:</div>
     <div id="inputLine">
       <span>C:\></span>
-      <input type="text" id="commandInput" autocomplete="off" />
+      <input type="text" id="commandInput" autocomplete="off"/>
       <span id="cursor"></span>
     </div>
     <div id="output"></div>
+  </div>
+
+  <!-- Retro Desktop (hidden until password) -->
+  <div id="desktop">
+    <!-- Files -->
+    <div class="file" style="top:50px; left:50px;" onclick="openFile('file1')">
+      <img src="file-icon.png"><span>log_01.txt</span>
+    </div>
+    <div class="file" style="top:50px; left:200px;" onclick="openFile('file2')">
+      <img src="file-icon.png"><span>report.txt</span>
+    </div>
+    <div class="file" style="top:50px; left:350px;" onclick="openFile('file3')">
+      <img src="file-icon.png"><span>???</span>
+    </div>
+  </div>
+
+  <!-- File Windows -->
+  <div class="window" id="file1Window">
+    <span class="close-btn" onclick="closeWindow('file1Window')">X</span>
+    <pre>
+INVESTIGATOR CASE LOG – ROBLOXIA MISSING PERSONS
+
+Date: April 7, 2026
+Investigator: [Redacted]
+
+I’ve been patrolling Robloxia and noticing a disturbing trend—people disappearing...
+    </pre>
+  </div>
+
+  <div class="window" id="file2Window">
+    <span class="close-btn" onclick="closeWindow('file2Window')">X</span>
+    <pre>
+LOCAL POLICE DEPARTMENT
+INCIDENT REPORT
+
+Case Number: 85-07-119
+Date Filed: July 14, 1985
+Reporting Officer: Lt. R. Caldwell
+
+SUBJECT: Suspicious Activity – Deceased Adult Male Reported Seen Walking...
+    </pre>
+  </div>
+
+  <div class="window" id="file3Window">
+    <span class="close-btn" onclick="closeWindow('file3Window')">X</span>
+    <video width="640" controls autoplay>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 
   <script>
     const password = "iceknight.Password = Poison Ivy90012";
     const input = document.getElementById("commandInput");
     const output = document.getElementById("output");
-
-    // Files (can expand later)
-    const files = [
-      { name: "log_01.txt", path: "logs/log_01.txt", type: "text" },
-      { name: "report_01.txt", path: "reports/report_01.txt", type: "text" },
-      { name: "secret_video.mp4", path: "media/video_01.mp4", type: "video" }
-    ];
+    const terminal = document.getElementById("terminal");
+    const desktop = document.getElementById("desktop");
 
     input.focus();
 
-    input.addEventListener("keydown", function(e) {
-      if(e.key === "Enter") {
+    input.addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
         const command = input.value.trim();
         if(command === password){
-          output.innerHTML += `<div class="message">Password accepted! Files unlocked:</div>`;
-          files.forEach(file => {
-            if(file.type === "text"){
-              output.innerHTML += `<div class="message">- <span class="locked">${file.name}</span></div>`;
-            } else if(file.type === "video"){
-              output.innerHTML += `<div class="message">- <span class="locked">??? (video)</span></div>`;
-            }
-          });
-          // Add click event to show text files
-          setTimeout(() => showFiles(), 100);
+          output.innerHTML += `<div class="message">Password accepted! Launching desktop...</div>`;
+          // fade out terminal
+          terminal.style.display = "none";
+          // show desktop
+          desktop.style.display = "block";
         } else {
           output.innerHTML += `<div class="message">Invalid password. Try again.</div>`;
         }
@@ -124,30 +183,16 @@
       }
     });
 
-    function showFiles() {
-      files.forEach(file => {
-        if(file.type === "text"){
-          const div = document.createElement("div");
-          div.className = "message";
-          div.innerHTML = `<span class="locked">${file.name}</span>`;
-          div.style.cursor = "pointer";
-          div.onclick = () => fetch(file.path)
-            .then(r => r.text())
-            .then(t => alert(t));
-          output.appendChild(div);
-        } else if(file.type === "video"){
-          const div = document.createElement("div");
-          div.className = "message";
-          div.innerHTML = `<span class="locked">??? (video)</span>`;
-          div.style.cursor = "pointer";
-          div.onclick = () => {
-            const videoWin = window.open("", "_blank");
-            videoWin.document.write(`<video width="640" controls autoplay><source src="${file.path}" type="video/mp4"></video>`);
-          };
-          output.appendChild(div);
-        }
-      });
+    function openFile(file){
+      if(file === "file1") document.getElementById("file1Window").style.display = "block";
+      if(file === "file2") document.getElementById("file2Window").style.display = "block";
+      if(file === "file3") document.getElementById("file3Window").style.display = "block";
+    }
+
+    function closeWindow(win){
+      document.getElementById(win).style.display = "none";
     }
   </script>
 </body>
+</html>
 </html>
